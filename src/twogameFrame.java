@@ -7,8 +7,12 @@ import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+public class twogameFrame extends JFrame implements ActionListener {
 
-public class gameFrame extends JFrame implements ActionListener {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+    }
+
     MainPanel panel;
     App state = new App();
     JLabel lblturnDisplay;
@@ -51,7 +55,8 @@ public class gameFrame extends JFrame implements ActionListener {
     int counter = 0;
     String turn = "X";
 
-    gameFrame(){
+
+    twogameFrame(){
         String title = "TicTacToe";
 
 
@@ -219,10 +224,6 @@ public class gameFrame extends JFrame implements ActionListener {
 
     }
  
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        // TODO Auto-generated method stub
-    }
     
     public void winchecker(){
         if (  ((R00.getText() == "X") && (R01.getText() == "X") && (R02.getText() == "X"))  ||   ((R10.getText() == "X") && (R11.getText() == "X") && (R12.getText() == "X"))  ||   ((R20.getText() == "X") && (R21.getText() == "X") && (R22.getText() == "X"))  ||   ((R00.getText() == "X") && (R10.getText() == "X") && (R20.getText() == "X"))  ||   ((R01.getText() == "X") && (R11.getText() == "X") && (R21.getText() == "X"))  ||   ((R02.getText() == "X") && (R12.getText() == "X") && (R22.getText() == "X"))  ||   ((R00.getText() == "X") && (R11.getText() == "X") && (R22.getText() == "X"))  ||   ((R02.getText() == "X") && (R11.getText() == "X") && (R20.getText() == "X"))  ){
@@ -245,4 +246,5 @@ public class gameFrame extends JFrame implements ActionListener {
             panel.repaint();
         }
     }
+    
 }

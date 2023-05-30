@@ -24,7 +24,7 @@ public class App implements ActionListener {
     }
 
     public static void twoPlayerStartup() {
-        gameFrame frame = new gameFrame();
+        onegameFrame frame = new onegameFrame();
         frame.setSize(x,yoffset);
 
         JButton reset = new JButton("Reset");
@@ -53,7 +53,7 @@ public class App implements ActionListener {
     }
 
     public static void onePlayerStartup(){
-        gameFrame frame = new gameFrame();
+        onegameFrame frame = new onegameFrame();
         frame.setSize(x,yoffset);
 
         JButton reset = new JButton("Reset");
@@ -61,7 +61,7 @@ public class App implements ActionListener {
         reset.addActionListener(e -> {
             frame.dispose();
             winstate = false;
-            twoPlayerStartup();
+            onePlayerStartup();
         });
 
         JButton back = new JButton("Back");
