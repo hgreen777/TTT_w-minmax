@@ -67,7 +67,7 @@ public class onegameFrame extends JFrame implements ActionListener {
     String[][] gameBoard = new String[3][3];  
     public void fillArray(){
         for (int i = 0; i < 3; i++){
-            for (int j = 0; i < 3; i++){
+            for (int j = 0; j < 3; j++){
                 gameBoard[i][j] = "";
             }
         } 
@@ -164,7 +164,7 @@ public class onegameFrame extends JFrame implements ActionListener {
         
         two0.addActionListener(e -> {turnChanger(two0, R20); gameBoard[2][0] = R20.getText();});
         two1.addActionListener(e -> {turnChanger(two1, R21); gameBoard[2][1] = R21.getText();});
-        two2.addActionListener(e -> {turnChanger(two0, R22); gameBoard[2][2] = R22.getText();});
+        two2.addActionListener(e -> {turnChanger(two2, R22); gameBoard[2][2] = R22.getText();});
         
         //Adding Buttons to Frame
         this.add(oo);this.add(o1);this.add(o2); //Adding First row of buttons
@@ -243,7 +243,7 @@ public class onegameFrame extends JFrame implements ActionListener {
             lblturnDisplay.setText(turn + " Turn");
             
             //Prepping for AI Algorithm
-            btnVisible(false);
+            //btnVisible(false);
             minimax(); // After X go has been done and set, Algorithm gets to work
 
             //vv Code below potentially not needed
@@ -263,20 +263,23 @@ public class onegameFrame extends JFrame implements ActionListener {
     //Checks who has won the fight 
     public void winchecker(){
         if (  ((R00.getText() == "X") && (R01.getText() == "X") && (R02.getText() == "X"))  ||   ((R10.getText() == "X") && (R11.getText() == "X") && (R12.getText() == "X"))  ||   ((R20.getText() == "X") && (R21.getText() == "X") && (R22.getText() == "X"))  ||   ((R00.getText() == "X") && (R10.getText() == "X") && (R20.getText() == "X"))  ||   ((R01.getText() == "X") && (R11.getText() == "X") && (R21.getText() == "X"))  ||   ((R02.getText() == "X") && (R12.getText() == "X") && (R22.getText() == "X"))  ||   ((R00.getText() == "X") && (R11.getText() == "X") && (R22.getText() == "X"))  ||   ((R02.getText() == "X") && (R11.getText() == "X") && (R20.getText() == "X"))  ){
-            oo.setVisible(false);o1.setVisible(false);o2.setVisible(false);
-            Io.setVisible(false);I1.setVisible(false);I2.setVisible(false);
-            two0.setVisible(false);two1.setVisible(false);two2.setVisible(false);
+            btnVisible(false);
             state.winstate = true;
             panel.repaint();
             lblResult.setText("X Wins");
             
 
         }else if (  ((R00.getText() == "O") && (R01.getText() == "O") && (R02.getText() == "O"))  ||   ((R10.getText() == "O") && (R11.getText() == "O") && (R12.getText() == "O"))  ||   ((R20.getText() == "O") && (R21.getText() == "O") && (R22.getText() == "O"))  ||   ((R00.getText() == "O") && (R10.getText() == "O") && (R20.getText() == "O"))  ||   ((R01.getText() == "O") && (R11.getText() == "O") && (R21.getText() == "O"))  ||   ((R02.getText() == "O") && (R12.getText() == "O") && (R22.getText() == "O"))  ||   ((R00.getText() == "O") && (R11.getText() == "O") && (R22.getText() == "O"))  ||   ((R02.getText() == "O") && (R11.getText() == "O") && (R20.getText() == "O"))  ){
-            oo.setVisible(false);o1.setVisible(false);o2.setVisible(false);
-            Io.setVisible(false);I1.setVisible(false);I2.setVisible(false);
-            two0.setVisible(false);two1.setVisible(false);two2.setVisible(false);
+            btnVisible(false);
             
             lblResult.setText("O Wins");
+            lblResult.setVisible(true);
+            state.winstate = true;
+            panel.repaint();
+        }else if ( (R00.getText() != "") && (R01.getText() != "") && (R02.getText() != "") && (R10.getText() != "") && (R11.getText() != "") && (R12.getText() != "") && (R20.getText() != "") && (R21.getText() != "") && (R22.getText() != "")){
+            btnVisible(false);
+            
+            lblResult.setText("Draw");
             lblResult.setVisible(true);
             state.winstate = true;
             panel.repaint();
@@ -294,10 +297,13 @@ public class onegameFrame extends JFrame implements ActionListener {
     }
 
     public void testArray(){
-        for (int i = 0; i < 3; i++){
-            for (int j = 0; i < 3; i++){
-                System.out.println(gameBoard[i][j]);
+        System.out.print("{");
+        for (int i = 0; i <= 2; i++){
+            for (int j = 0; j <= 2; j++){
+                System.out.print(gameBoard[i][j] + ", ");
             }
+            System.out.println("");
         } 
+        System.out.println("}");
     }
 }
