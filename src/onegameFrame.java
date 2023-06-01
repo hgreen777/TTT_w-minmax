@@ -21,7 +21,6 @@ public class onegameFrame extends JFrame implements ActionListener {
     //Importing Game Board
     MainPanel panel;
     App state = new App(); 
-    position position;
 
     //Info Label Decalration
     JLabel lblturnDisplay;
@@ -300,30 +299,15 @@ public class onegameFrame extends JFrame implements ActionListener {
 
     // Checks if there is any winner in the array of the gameboard ---- needed for the minimax algorithm as testing whether someone will win off a go without changing the actual board
     public int boardWinChecker(){
-        for (int i = 0; i < 3; i++){
-            if (gameBoard[i][0] == gameBoard[i][1] && gameBoard[i][0] == gameBoard[i][2]){ //Checking all horizontal options
-                if (gameBoard[i][0] == "X"){
-                    return 1;
-                } else{
-                    return -1;
-                }
-            }else if (gameBoard[0][i] == gameBoard[i][i] && gameBoard[1][i] == gameBoard[2][i]){ //checkign all vertical options
-                if (gameBoard[0][i] == "X"){
-                    return 1; // Xwins
-                } else{
-                    return -1; //O wins
-                }
-            }else if ((gameBoard[0][0] == gameBoard[1][1] && gameBoard[2][2] == gameBoard[0][0])|| (gameBoard[2][0] == gameBoard[1][1] && gameBoard[0][2] == gameBoard[2][0])){//Checking diagonal goes
-                if (gameBoard[0][i] == "X"){
-                    return 1; // Xwins
-                } else{
-                    return -1; //O wins
-                }
-            } else if (gameBoard[i][0] != "" && gameBoard[i][1] != "" && gameBoard[i][2] != "" &&gameBoard[0][i] != "" && gameBoard[1][i] != "" && gameBoard[2][i] != ""){
-                return 0; //Draw
-            }
+        if (  ((gameBoard[0][0] == "X") && (gameBoard[0][1] == "X") && (gameBoard[0][2] == "X"))  ||   ((gameBoard[1][0] == "X") && (gameBoard[1][1] == "X") && (gameBoard[1][2] == "X"))  ||   ((gameBoard[2][0] == "X") && (gameBoard[2][1] == "X") && (gameBoard[2][2] == "X"))  ||   ((gameBoard[0][0] == "X") && (gameBoard[1][0] == "X") && (gameBoard[2][0] == "X"))  ||   ((gameBoard[0][1] == "X") && (gameBoard[1][1] == "X") && (gameBoard[2][1] == "X"))  ||   ((gameBoard[0][2] == "X") && (gameBoard[1][2] == "X") && (gameBoard[2][2] == "X"))  ||   ((gameBoard[0][0] == "X") && (gameBoard[1][1] == "X") && (gameBoard[2][2] == "X"))  ||   ((gameBoard[0][2] == "X") && (gameBoard[1][1] == "X") && (gameBoard[2][0] == "X"))  ){
+            return 1;
+        }else if ( ((gameBoard[0][0] == "O") && (gameBoard[0][1] == "O") && (gameBoard[0][2] == "O"))  ||   ((gameBoard[1][0] == "O") && (gameBoard[1][1] == "O") && (gameBoard[1][2] == "O"))  ||   ((gameBoard[2][0] == "O") && (gameBoard[2][1] == "O") && (gameBoard[2][2] == "O"))  ||   ((gameBoard[0][0] == "O") && (gameBoard[1][0] == "O") && (gameBoard[2][0] == "O"))  ||   ((gameBoard[0][1] == "O") && (gameBoard[1][1] == "O") && (gameBoard[2][1] == "O"))  ||   ((gameBoard[0][2] == "O") && (gameBoard[1][2] == "O") && (gameBoard[2][2] == "O"))  ||   ((gameBoard[0][0] == "O") && (gameBoard[1][1] == "O") && (gameBoard[2][2] == "O"))  ||   ((gameBoard[0][2] == "O") && (gameBoard[1][1] == "O") && (gameBoard[2][0] == "O"))  ){
+            return -1;
+        }else if ( (R00.getText() != "") && (R01.getText() != "") && (R02.getText() != "") && (R10.getText() != "") && (R11.getText() != "") && (R12.getText() != "") && (R20.getText() != "") && (R21.getText() != "") && (R22.getText() != "")){
+            return 0;
+        }else{
+            return 2; //Game not finished
         }
-        return 2; //Game not finished
         
     }
 
@@ -338,7 +322,7 @@ public class onegameFrame extends JFrame implements ActionListener {
                 for (int j = 0; j < 3; j ++){
                     if (gameBoard[i][j] == ""){
                         gameBoard[i][j] = ai;
-                        int score = minimax(0, false);
+                        int score = minimax(gameBoard, 9-counter, false);
                         gameBoard[i][j] = "";
                         if (score > bestScore){
                             bestScore = score;
@@ -364,9 +348,9 @@ public class onegameFrame extends JFrame implements ActionListener {
      * tie = 0
      * no winner = 2
      */
-    public int minimax(int depth, boolean ismaximising){
+    public int minimax(String[][] board, int depth, boolean ismaximising){
         int result = boardWinChecker();
-        if (result != 2){
+        if (result != 2 || depth == 0){
             return result;
         }
 
@@ -376,7 +360,7 @@ public class onegameFrame extends JFrame implements ActionListener {
                 for (int j = 0; j < 3; j ++){
                     if(gameBoard[i][j] == ""){
                         gameBoard[i][j] = ai;
-                        int score = minimax(depth +1, false);
+                        int score = minimax(gameBoard, depth -1, false);
                         gameBoard[i][j] = "";
                         bestScore = Math.max(score, bestScore);
                     }
@@ -389,7 +373,7 @@ public class onegameFrame extends JFrame implements ActionListener {
                 for (int j = 0; j < 3; j ++){
                     if(gameBoard[i][j] == ""){
                         gameBoard[i][j] = human;
-                        int score = minimax(depth +1, true);
+                        int score = minimax(gameBoard, depth -1, true);
                         gameBoard[i][j] = "";
                         bestScore = Math.min(score, bestScore);
                     }
