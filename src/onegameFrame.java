@@ -315,6 +315,7 @@ public class onegameFrame extends JFrame implements ActionListener {
         if (state.winstate != true){    
             int bestScore = -1000000;
             int bestmove[] = new int[2];
+            boolean isHumanMax = false;
 
             //Checks every possibel open go and sets it the ai go --> than runs minimax to see what score this will produce
             // resetts the position before chekcing if the score is better than any previous gos
@@ -322,7 +323,7 @@ public class onegameFrame extends JFrame implements ActionListener {
                 for (int j = 0; j < 3; j ++){
                     if (gameBoard[i][j] == ""){
                         gameBoard[i][j] = ai;
-                        int score = minimax(gameBoard, 9-counter, false);
+                        int score = minimax(gameBoard, 9-counter, isHumanMax);
                         gameBoard[i][j] = "";
                         if (score > bestScore){
                             bestScore = score;
@@ -359,7 +360,7 @@ public class onegameFrame extends JFrame implements ActionListener {
             for (int i = 0; i < 3; i++){
                 for (int j = 0; j < 3; j ++){
                     if(gameBoard[i][j] == ""){
-                        gameBoard[i][j] = ai;
+                        gameBoard[i][j] = "X";
                         int score = minimax(gameBoard, depth -1, false);
                         gameBoard[i][j] = "";
                         bestScore = Math.max(score, bestScore);
@@ -372,7 +373,7 @@ public class onegameFrame extends JFrame implements ActionListener {
             for (int i = 0; i < 3; i++){
                 for (int j = 0; j < 3; j ++){
                     if(gameBoard[i][j] == ""){
-                        gameBoard[i][j] = human;
+                        gameBoard[i][j] = "O";
                         int score = minimax(gameBoard, depth -1, true);
                         gameBoard[i][j] = "";
                         bestScore = Math.min(score, bestScore);
