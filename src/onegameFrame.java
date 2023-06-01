@@ -1,9 +1,11 @@
 import javax.swing.*;
+import javax.swing.text.Position;
+
 import java.awt.Color;
+import java.util.HashMap;
+import java.util.Map;
 
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -18,7 +20,8 @@ public class onegameFrame extends JFrame implements ActionListener {
     
     //Importing Game Board
     MainPanel panel;
-    App state = new App();
+    App state = new App(); 
+    position position;
 
     //Info Label Decalration
     JLabel lblturnDisplay;
@@ -61,7 +64,10 @@ public class onegameFrame extends JFrame implements ActionListener {
     int iybtn20 = ybtn20.intValue();
 
     int counter = 0;
-    String turn = "X";
+    String turn;
+
+    String human = "O";
+    String ai = "X";
 
     //Array for minimax algorithm 
     String[][] gameBoard = new String[3][3];  
@@ -80,6 +86,7 @@ public class onegameFrame extends JFrame implements ActionListener {
 
 
     onegameFrame(){
+        turn = ai;
         fillArray();
         String title = "One Player TicTacToe";
 
@@ -154,17 +161,17 @@ public class onegameFrame extends JFrame implements ActionListener {
         two2.setBounds(ixbtn02, iybtn20, 100, 100);
 
         //Adding Action listener to buttons
-        oo.addActionListener(e -> {turnChanger(oo, R00); gameBoard[0][0] = R00.getText();testArray();}); 
-        o1.addActionListener(e -> {turnChanger(o1, R01); gameBoard[0][1] = R01.getText();testArray();}); 
-        o2.addActionListener(e -> {turnChanger(o2, R02); gameBoard[0][2] = R02.getText();}); 
+        oo.addActionListener(e -> {gameBoard[0][0] = turn;boardUpdate();AImove();}); 
+        o1.addActionListener(e -> {gameBoard[0][1] = turn;boardUpdate();AImove();}); 
+        o2.addActionListener(e -> {gameBoard[0][2] = turn;boardUpdate();AImove();}); 
         
-        Io.addActionListener(e -> {turnChanger(Io, R10); gameBoard[1][0] = R10.getText();}); 
-        I1.addActionListener(e -> {turnChanger(I1, R11); gameBoard[1][1] = R11.getText();}); 
-        I2.addActionListener(e -> {turnChanger(I2, R12); gameBoard[1][2] = R12.getText();});
+        Io.addActionListener(e -> {gameBoard[1][0] = turn;boardUpdate();AImove();}); 
+        I1.addActionListener(e -> {gameBoard[1][1] = turn;boardUpdate();AImove();}); 
+        I2.addActionListener(e -> {gameBoard[1][2] = turn;boardUpdate();AImove();});
         
-        two0.addActionListener(e -> {turnChanger(two0, R20); gameBoard[2][0] = R20.getText();});
-        two1.addActionListener(e -> {turnChanger(two1, R21); gameBoard[2][1] = R21.getText();});
-        two2.addActionListener(e -> {turnChanger(two2, R22); gameBoard[2][2] = R22.getText();});
+        two0.addActionListener(e -> {gameBoard[2][0] = turn;boardUpdate();AImove();});
+        two1.addActionListener(e -> {gameBoard[2][1] = turn;boardUpdate();AImove();});
+        two2.addActionListener(e -> {gameBoard[2][2] = turn;boardUpdate();AImove();});
         
         //Adding Buttons to Frame
         this.add(oo);this.add(o1);this.add(o2); //Adding First row of buttons
@@ -177,63 +184,65 @@ public class onegameFrame extends JFrame implements ActionListener {
         R00.setFont(new Font("Ariel",Font.BOLD,150));
         R00.setBounds(ixbtn00, iybtn00, 500, 100);
         this.add(R00);
-        R00.setVisible(false);
+        R00.setVisible(true);
 
         R01 = new JLabel("");
         R01.setFont(new Font("Ariel",Font.BOLD,150));
         R01.setBounds(ixbtn01, iybtn00, 500, 100);
         this.add(R01);
-        R01.setVisible(false);
+        R01.setVisible(true);
 
         R02 = new JLabel("");
         R02.setFont(new Font("Ariel",Font.BOLD,150));
         R02.setBounds(ixbtn02, iybtn00, 500, 100);
         this.add(R02);
-        R02.setVisible(false);
+        R02.setVisible(true);
 
         R10 = new JLabel("");
         R10.setFont(new Font("Ariel",Font.BOLD,150));
         R10.setBounds(ixbtn00, iybtn10, 500, 100);
         this.add(R10);
-        R10.setVisible(false);
+        R10.setVisible(true);
 
         R11 = new JLabel("");
         R11.setFont(new Font("Ariel",Font.BOLD,150));
         R11.setBounds(ixbtn01, iybtn10, 500, 100);
         this.add(R11);
-        R11.setVisible(false);
+        R11.setVisible(true);
 
         R12 = new JLabel("");
         R12.setFont(new Font("Ariel",Font.BOLD,150));
         R12.setBounds(ixbtn02, iybtn10, 500, 100);
         this.add(R12);
-        R12.setVisible(false);
+        R12.setVisible(true);
 
         R12 = new JLabel("");
         R12.setFont(new Font("Ariel",Font.BOLD,150));
         R12.setBounds(ixbtn02, iybtn10, 500, 100);
         this.add(R12);
-        R12.setVisible(false);
+        R12.setVisible(true);
 
         R20 = new JLabel("");
         R20.setFont(new Font("Ariel",Font.BOLD,150));
         R20.setBounds(ixbtn00, iybtn20, 500, 100);
         this.add(R20);
-        R20.setVisible(false);
+        R20.setVisible(true);
 
         R21 = new JLabel("");
         R21.setFont(new Font("Ariel",Font.BOLD,150));
         R21.setBounds(ixbtn01, iybtn20, 500, 100);
         this.add(R21);
-        R21.setVisible(false);
+        R21.setVisible(true);
         
         R22 = new JLabel("");
         R22.setFont(new Font("Ariel",Font.BOLD,150));
         R22.setBounds(ixbtn02, iybtn20, 500, 100);
         this.add(R22);
-        R22.setVisible(false);
-        
+        R22.setVisible(true);
 
+
+        
+        AImove();
     }
     //Sets the label under button to result and sets the turn label to next go, than runs AI minimax algorithm
     public void turnChanger(JButton x, JLabel y){
@@ -241,12 +250,7 @@ public class onegameFrame extends JFrame implements ActionListener {
             y.setText("X");
             turn = "O";
             lblturnDisplay.setText(turn + " Turn");
-            
-            //Prepping for AI Algorithm
-            //btnVisible(false);
-            minimax(); // After X go has been done and set, Algorithm gets to work
 
-            //vv Code below potentially not needed
         }else{
             y.setText("O");
             turn = "X";
@@ -261,7 +265,7 @@ public class onegameFrame extends JFrame implements ActionListener {
     }
  
     //Checks who has won the fight 
-    public void winchecker(){
+    public void winchecker(){ 
         if (  ((R00.getText() == "X") && (R01.getText() == "X") && (R02.getText() == "X"))  ||   ((R10.getText() == "X") && (R11.getText() == "X") && (R12.getText() == "X"))  ||   ((R20.getText() == "X") && (R21.getText() == "X") && (R22.getText() == "X"))  ||   ((R00.getText() == "X") && (R10.getText() == "X") && (R20.getText() == "X"))  ||   ((R01.getText() == "X") && (R11.getText() == "X") && (R21.getText() == "X"))  ||   ((R02.getText() == "X") && (R12.getText() == "X") && (R22.getText() == "X"))  ||   ((R00.getText() == "X") && (R11.getText() == "X") && (R22.getText() == "X"))  ||   ((R02.getText() == "X") && (R11.getText() == "X") && (R20.getText() == "X"))  ){
             btnVisible(false);
             state.winstate = true;
@@ -286,16 +290,36 @@ public class onegameFrame extends JFrame implements ActionListener {
         }
     }
 
-    public void minimax(){
-
+    public int boardWinChecker(){
+        for (int i = 0; i < 3; i++){
+            if (gameBoard[i][0] == gameBoard[i][1] && gameBoard[i][0] == gameBoard[i][2]){ //Checking all horizontal options
+                if (gameBoard[i][0] == "X"){
+                    return 1;
+                } else{
+                    return -1;
+                }
+            }else if (gameBoard[0][i] == gameBoard[i][i] && gameBoard[1][i] == gameBoard[2][i]){ //checkign all vertical options
+                if (gameBoard[0][i] == "X"){
+                    return 1; // Xwins
+                } else{
+                    return -1; //O wins
+                }
+            } else if (gameBoard[i][0] != "" && gameBoard[i][1] != "" && gameBoard[i][2] != "" &&gameBoard[0][i] != "" && gameBoard[1][i] != "" && gameBoard[2][i] != ""){
+                return 0; //Draw
+            }
+        }
+        return 2; //Game not finished
+        
     }
 
+    //Sets all buttons to either visible or not
     public void btnVisible(Boolean flip){
         oo.setVisible(flip);o1.setVisible(flip);o2.setVisible(flip);
         Io.setVisible(flip);I1.setVisible(flip);I2.setVisible(flip);
         two0.setVisible(flip);two1.setVisible(flip);two2.setVisible(flip);
     }
 
+    //Prints current State of gameboard used for testing
     public void testArray(){
         System.out.print("{");
         for (int i = 0; i <= 2; i++){
@@ -306,4 +330,122 @@ public class onegameFrame extends JFrame implements ActionListener {
         } 
         System.out.println("}");
     }
+
+    public void AImove(){
+        
+        int bestScore = -10;
+        int bestmove[] = new int[2];
+
+        for (int i = 0; i < 3; i++){
+            for (int j = 0; j < 3; j ++){
+                if (gameBoard[i][j] == ""){
+                    gameBoard[i][j] = ai;
+                    int score = minimax(0, false);
+                    gameBoard[i][j] = "";
+                    if (score > bestScore){
+                        bestScore = score;
+                        bestmove[0] = i;
+                        bestmove[1] = j;
+                    }
+                }
+            }
+        }
+
+        int x = bestmove[0];
+        int y = bestmove[1];
+        gameBoard[x][y] = ai;
+        boardUpdate();
+        testArray();
+    }
+
+    /*
+     * X: 1
+     * O: -1
+     * tie = 0
+     * no winner = 2
+     */
+    public int minimax(int depth, boolean ismaximising){
+        int result = boardWinChecker();
+        if (result != 2){
+            return result;
+        }
+
+        if (ismaximising == true){
+            int bestScore = -10000;
+            for (int i = 0; i < 3; i++){
+                for (int j = 0; j < 3; j ++){
+                    if(gameBoard[i][j] == ""){
+                        gameBoard[i][j] = human;
+                        int score = minimax(depth +1, false);
+                        gameBoard[i][j] = "";
+                        bestScore = Math.max(score, bestScore);
+                    }
+                }
+            }
+            return bestScore;
+        } else{
+            int bestScore = 100000;
+            for (int i = 0; i < 3; i++){
+                for (int j = 0; j < 3; j ++){
+                    if(gameBoard[i][j] == ""){
+                        gameBoard[i][j] = ai;
+                        int score = minimax(depth +1, true);
+                        gameBoard[i][j] = "";
+                        bestScore = Math.min(score, bestScore);
+                    }
+                }
+            }
+            return bestScore;
+        }
+
+    }
+
+    public void boardUpdate(){
+        if((counter % 2) == 0){
+            turn = "O";
+            lblturnDisplay.setText(turn + " Turn");
+
+        }else{
+            turn = "X";
+            lblturnDisplay.setText(turn + " Turn");
+        }
+        
+        R00.setText(gameBoard[0][0]);R01.setText(gameBoard[0][1]);R02.setText(gameBoard[0][2]);
+        R10.setText(gameBoard[1][0]);R11.setText(gameBoard[1][1]);R12.setText(gameBoard[1][2]);
+        R20.setText(gameBoard[2][0]);R21.setText(gameBoard[2][1]);R22.setText(gameBoard[2][2]);
+
+        if (gameBoard[0][0] != ""){
+            oo.setVisible(false);
+        }
+        if (gameBoard[0][1] != ""){
+            o1.setVisible(false);
+        }
+        if (gameBoard[0][2] != ""){
+            o2.setVisible(false);
+        }
+        
+        if (gameBoard[1][0] != ""){
+            Io.setVisible(false);
+        }
+        if (gameBoard[1][1] != ""){
+            I1.setVisible(false);
+        }
+        if (gameBoard[1][2] != ""){
+            I2.setVisible(false);
+        }
+
+        if (gameBoard[2][0] != ""){
+            two0.setVisible(false);
+        }
+        if (gameBoard[2][1] != ""){
+            two1.setVisible(false);
+        }
+        if (gameBoard[2][2] != ""){
+            two2.setVisible(false);
+        }
+
+        winchecker();
+        counter += 1;
+    }
 }
+
