@@ -63,6 +63,7 @@ public class onegameFrame extends JFrame implements ActionListener {
     Double ybtn20 = ((0.833)*yoffset)-50.0; //Vertical positioning for third row
     int iybtn20 = ybtn20.intValue();
 
+    //Variables needed for game playy
     int counter = 0;
     String turn;
 
@@ -78,7 +79,7 @@ public class onegameFrame extends JFrame implements ActionListener {
             }
         } 
     }  
-    /*
+    /* ^^ Above method makes array empty like shown
      * {0,0,0}
      * {0,0,0}
      * {0,0,0}
@@ -86,6 +87,7 @@ public class onegameFrame extends JFrame implements ActionListener {
 
 
     onegameFrame(){
+        //When Building board sets the first go to ai (and sets the array gameboard to empty)
         turn = ai;
         fillArray();
         String title = "One Player TicTacToe";
@@ -99,6 +101,7 @@ public class onegameFrame extends JFrame implements ActionListener {
         this.setIconImage(image.getImage());
         this.getContentPane().setBackground(new Color(153,204,255));
 
+        //Setting title of board
         JLabel Menutitle = new JLabel();// Label title
         Menutitle.setText("TicTacToe");
         Menutitle.setFont(new Font("Ariel",Font.BOLD,20));
@@ -123,12 +126,18 @@ public class onegameFrame extends JFrame implements ActionListener {
         lblResult.setHorizontalAlignment(JLabel.CENTER); 
         this.add(lblResult);
 
-        //Drawing board
+        //Drawing board lines
         panel = new MainPanel();
 
+        //adding board to frame
         this.add(panel);
         this.pack();
+
+        //Adding all components like buttons and result labels
         components();
+
+        //Starts with ai go
+        AImove();
     }
 
     public void components(){
@@ -161,24 +170,24 @@ public class onegameFrame extends JFrame implements ActionListener {
         two2.setBounds(ixbtn02, iybtn20, 100, 100);
 
         //Adding Action listener to buttons
-        oo.addActionListener(e -> {gameBoard[0][0] = turn;boardUpdate();AImove();}); 
-        o1.addActionListener(e -> {gameBoard[0][1] = turn;boardUpdate();AImove();}); 
-        o2.addActionListener(e -> {gameBoard[0][2] = turn;boardUpdate();AImove();}); 
+        oo.addActionListener(e -> {gameBoard[0][0] = human;boardUpdate();counter +=1;AImove();}); 
+        o1.addActionListener(e -> {gameBoard[0][1] = human;boardUpdate();counter +=1;AImove();}); 
+        o2.addActionListener(e -> {gameBoard[0][2] = human;boardUpdate();counter +=1;AImove();}); 
         
-        Io.addActionListener(e -> {gameBoard[1][0] = turn;boardUpdate();AImove();}); 
-        I1.addActionListener(e -> {gameBoard[1][1] = turn;boardUpdate();AImove();}); 
-        I2.addActionListener(e -> {gameBoard[1][2] = turn;boardUpdate();AImove();});
+        Io.addActionListener(e -> {gameBoard[1][0] = human;boardUpdate();counter +=1;AImove();}); 
+        I1.addActionListener(e -> {gameBoard[1][1] = human;boardUpdate();counter +=1;AImove();}); 
+        I2.addActionListener(e -> {gameBoard[1][2] = human;boardUpdate();counter +=1;AImove();});
         
-        two0.addActionListener(e -> {gameBoard[2][0] = turn;boardUpdate();AImove();});
-        two1.addActionListener(e -> {gameBoard[2][1] = turn;boardUpdate();AImove();});
-        two2.addActionListener(e -> {gameBoard[2][2] = turn;boardUpdate();AImove();});
+        two0.addActionListener(e -> {gameBoard[2][0] = human;boardUpdate();counter +=1;AImove();});
+        two1.addActionListener(e -> {gameBoard[2][1] = human;boardUpdate();counter +=1;AImove();});
+        two2.addActionListener(e -> {gameBoard[2][2] = human;boardUpdate();counter +=1;AImove();});
         
         //Adding Buttons to Frame
         this.add(oo);this.add(o1);this.add(o2); //Adding First row of buttons
         this.add(Io);this.add(I1);this.add(I2);
         this.add(two0);this.add(two1);this.add(two2);       
         
-        //All Result Label Declaration byt starting hidden
+        //All Result Label Declaration and adding to gameboard
 
         R00 = new JLabel("");
         R00.setFont(new Font("Ariel",Font.BOLD,150));
@@ -239,30 +248,29 @@ public class onegameFrame extends JFrame implements ActionListener {
         R22.setBounds(ixbtn02, iybtn20, 500, 100);
         this.add(R22);
         R22.setVisible(true);
-
-
-        
-        AImove();
     }
-    //Sets the label under button to result and sets the turn label to next go, than runs AI minimax algorithm
-    public void turnChanger(JButton x, JLabel y){
-        if((counter % 2) == 0){
-            y.setText("X");
-            turn = "O";
-            lblturnDisplay.setText(turn + " Turn");
 
-        }else{
-            y.setText("O");
-            turn = "X";
-            lblturnDisplay.setText(turn + " Turn");
-        }
-
-        x.setVisible(false);
-        y.setVisible(true);
-        winchecker();
-        counter += 1;
-
+    //Sets all buttons to either visible or not
+    public void btnVisible(Boolean flip){
+        oo.setVisible(flip);o1.setVisible(flip);o2.setVisible(flip);
+        Io.setVisible(flip);I1.setVisible(flip);I2.setVisible(flip);
+        two0.setVisible(flip);two1.setVisible(flip);two2.setVisible(flip);
     }
+
+    //Prints current State of gameboard used for testing
+    public void testArray(){
+        System.out.print("{");
+        for (int i = 0; i <= 2; i++){
+            for (int j = 0; j <= 2; j++){
+                System.out.print(gameBoard[i][j] + ", ");
+            }
+            System.out.println("");
+        } 
+        System.out.println("}");
+    }
+
+    //Reference point for updating game board
+    //See two player game for turnchanger code to ensure update board works correctly
  
     //Checks who has won the fight 
     public void winchecker(){ 
@@ -290,6 +298,7 @@ public class onegameFrame extends JFrame implements ActionListener {
         }
     }
 
+    // Checks if there is any winner in the array of the gameboard ---- needed for the minimax algorithm as testing whether someone will win off a go without changing the actual board
     public int boardWinChecker(){
         for (int i = 0; i < 3; i++){
             if (gameBoard[i][0] == gameBoard[i][1] && gameBoard[i][0] == gameBoard[i][2]){ //Checking all horizontal options
@@ -304,6 +313,12 @@ public class onegameFrame extends JFrame implements ActionListener {
                 } else{
                     return -1; //O wins
                 }
+            }else if ((gameBoard[0][0] == gameBoard[1][1] && gameBoard[2][2] == gameBoard[0][0])|| (gameBoard[2][0] == gameBoard[1][1] && gameBoard[0][2] == gameBoard[2][0])){//Checking diagonal goes
+                if (gameBoard[0][i] == "X"){
+                    return 1; // Xwins
+                } else{
+                    return -1; //O wins
+                }
             } else if (gameBoard[i][0] != "" && gameBoard[i][1] != "" && gameBoard[i][2] != "" &&gameBoard[0][i] != "" && gameBoard[1][i] != "" && gameBoard[2][i] != ""){
                 return 0; //Draw
             }
@@ -312,50 +327,35 @@ public class onegameFrame extends JFrame implements ActionListener {
         
     }
 
-    //Sets all buttons to either visible or not
-    public void btnVisible(Boolean flip){
-        oo.setVisible(flip);o1.setVisible(flip);o2.setVisible(flip);
-        Io.setVisible(flip);I1.setVisible(flip);I2.setVisible(flip);
-        two0.setVisible(flip);two1.setVisible(flip);two2.setVisible(flip);
-    }
-
-    //Prints current State of gameboard used for testing
-    public void testArray(){
-        System.out.print("{");
-        for (int i = 0; i <= 2; i++){
-            for (int j = 0; j <= 2; j++){
-                System.out.print(gameBoard[i][j] + ", ");
-            }
-            System.out.println("");
-        } 
-        System.out.println("}");
-    }
-
     public void AImove(){
-        
-        int bestScore = -10;
-        int bestmove[] = new int[2];
+        if (state.winstate != true){    
+            int bestScore = -1000000;
+            int bestmove[] = new int[2];
 
-        for (int i = 0; i < 3; i++){
-            for (int j = 0; j < 3; j ++){
-                if (gameBoard[i][j] == ""){
-                    gameBoard[i][j] = ai;
-                    int score = minimax(0, false);
-                    gameBoard[i][j] = "";
-                    if (score > bestScore){
-                        bestScore = score;
-                        bestmove[0] = i;
-                        bestmove[1] = j;
+            //Checks every possibel open go and sets it the ai go --> than runs minimax to see what score this will produce
+            // resetts the position before chekcing if the score is better than any previous gos
+            for (int i = 0; i < 3; i++){
+                for (int j = 0; j < 3; j ++){
+                    if (gameBoard[i][j] == ""){
+                        gameBoard[i][j] = ai;
+                        int score = minimax(0, false);
+                        gameBoard[i][j] = "";
+                        if (score > bestScore){
+                            bestScore = score;
+                            bestmove[0] = i;
+                            bestmove[1] = j;
+                        }
                     }
                 }
             }
-        }
 
-        int x = bestmove[0];
-        int y = bestmove[1];
-        gameBoard[x][y] = ai;
-        boardUpdate();
-        testArray();
+            int x = bestmove[0];
+            int y = bestmove[1];
+            gameBoard[x][y] = ai;
+            testArray();
+            boardUpdate();
+            counter+=1;
+        }
     }
 
     /*
@@ -375,7 +375,7 @@ public class onegameFrame extends JFrame implements ActionListener {
             for (int i = 0; i < 3; i++){
                 for (int j = 0; j < 3; j ++){
                     if(gameBoard[i][j] == ""){
-                        gameBoard[i][j] = human;
+                        gameBoard[i][j] = ai;
                         int score = minimax(depth +1, false);
                         gameBoard[i][j] = "";
                         bestScore = Math.max(score, bestScore);
@@ -388,7 +388,7 @@ public class onegameFrame extends JFrame implements ActionListener {
             for (int i = 0; i < 3; i++){
                 for (int j = 0; j < 3; j ++){
                     if(gameBoard[i][j] == ""){
-                        gameBoard[i][j] = ai;
+                        gameBoard[i][j] = human;
                         int score = minimax(depth +1, true);
                         gameBoard[i][j] = "";
                         bestScore = Math.min(score, bestScore);
@@ -445,7 +445,6 @@ public class onegameFrame extends JFrame implements ActionListener {
         }
 
         winchecker();
-        counter += 1;
     }
 }
 
