@@ -66,8 +66,8 @@ public class onegameFrame extends JFrame implements ActionListener {
     int counter = 0;
     String turn;
 
-    String human = "O";
-    String ai = "X";
+    String human;
+    String ai;
 
     //Array for minimax algorithm 
     String[][] gameBoard = new String[3][3];  
@@ -87,7 +87,15 @@ public class onegameFrame extends JFrame implements ActionListener {
 
     onegameFrame(){
         //When Building board sets the first go to ai (and sets the array gameboard to empty)
-        turn = ai;
+        if(App.aiToggle == 1){
+            ai = "X";
+            human = "O";
+            turn = ai;
+        }else{
+            ai = "O";
+            human = "X";
+            turn = human;
+        }
         fillArray();
         String title = "One Player TicTacToe";
 
@@ -135,8 +143,10 @@ public class onegameFrame extends JFrame implements ActionListener {
         //Adding all components like buttons and result labels
         components();
 
-        //Starts with ai go
-        AImove();
+        //Starts with ai go is set to AI as X in settings menu
+        if (App.aiToggle ==1){
+            AImove();
+        }
     }
 
     public void components(){
@@ -312,10 +322,11 @@ public class onegameFrame extends JFrame implements ActionListener {
     }
 
     public void AImove(){
-        if (state.winstate != true){    
+        if (state.winstate != true){  
+            int score;  
             int bestScore = -1000000;
             int bestmove[] = new int[2];
-            boolean isHumanMax = false;
+            boolean isHumanMax;
 
             //Checks every possibel open go and sets it the ai go --> than runs minimax to see what score this will produce
             // resetts the position before chekcing if the score is better than any previous gos
@@ -323,7 +334,13 @@ public class onegameFrame extends JFrame implements ActionListener {
                 for (int j = 0; j < 3; j ++){
                     if (gameBoard[i][j] == ""){
                         gameBoard[i][j] = ai;
-                        int score = minimax(gameBoard, 9-counter, isHumanMax);
+                        if(App.aiToggle == 1){
+                            isHumanMax = false;
+                            score = minimax(gameBoard, 9-counter, isHumanMax);
+                        }else{
+                            isHumanMax = true;
+                            score = minimax(gameBoard, 9-counter, isHumanMax);
+                        }
                         gameBoard[i][j] = "";
                         if (score > bestScore){
                             bestScore = score;

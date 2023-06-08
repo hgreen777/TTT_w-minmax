@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 public class App implements ActionListener {
     public static int x = 519;
     public static int yoffset = 513;
+    public static int aiToggle = 1; 
+    //1 = Ai is X, 2 = Ai is O;
 
     static boolean winstate = false;
 
