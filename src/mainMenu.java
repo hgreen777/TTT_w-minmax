@@ -32,11 +32,21 @@ public class mainMenu extends JFrame implements ActionListener {
         });
         btn2Player.setSize(100,50);
         btn2Player.setLocation(75, 125);
+        
+        JButton btnSettings = new JButton("Settings");
+        btnSettings.addActionListener(e -> {
+                this.dispose();
+                SettingsMenu settings = new SettingsMenu();
+                settings.setSize(250,250);
+        });
+        btnSettings.setSize(75,40);
+        btnSettings.setLocation(88,200);
+                
 
 
         this.add(title);
-        this.add(btn1Player);
-        this.add(btn2Player);
+        this.add(btn1Player); this.add(btn2Player);
+        this.add(btnSettings);
     }
 
     @Override
