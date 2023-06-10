@@ -33,7 +33,7 @@ public class SettingsMenu extends JFrame implements ActionListener {
                 System.out.println("Error");
             }
         });
-        btnBack.setSize(75, 50);
+        btnBack.setSize(75, 30);
         btnBack.setLocation(0, 0);
 
         //Window toggle text

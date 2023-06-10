@@ -14,7 +14,7 @@ public class App implements ActionListener {
     public static void main(String[] args) throws Exception {
         mainMenu menu = new mainMenu();
         menu.setTitle("Select GameMode");
-        menu.setSize(250,250);
+        menu.setSize(250,300);
         menu.setLayout(null);
         menu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         menu.setVisible(true);

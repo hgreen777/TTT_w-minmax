@@ -40,8 +40,8 @@ public class mainMenu extends JFrame implements ActionListener {
                 settings.setSize(250,250);
                 settings.setVisible(true);
         });
-        btnSettings.setSize(75,40);
-        btnSettings.setLocation(88,200);
+        btnSettings.setSize(95,30);
+        btnSettings.setLocation(78,200);
                 
 
 

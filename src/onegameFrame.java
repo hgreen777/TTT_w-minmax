@@ -179,17 +179,17 @@ public class onegameFrame extends JFrame implements ActionListener {
         two2.setBounds(ixbtn02, iybtn20, 100, 100);
 
         //Adding Action listener to buttons
-        oo.addActionListener(e -> {gameBoard[0][0] = human;boardUpdate();counter +=1;AImove();}); 
-        o1.addActionListener(e -> {gameBoard[0][1] = human;boardUpdate();counter +=1;AImove();}); 
-        o2.addActionListener(e -> {gameBoard[0][2] = human;boardUpdate();counter +=1;AImove();}); 
+        oo.addActionListener(e -> {gameBoard[0][0] = human;counter +=1;boardUpdate();AImove();}); 
+        o1.addActionListener(e -> {gameBoard[0][1] = human;counter += 1;boardUpdate();AImove();}); 
+        o2.addActionListener(e -> {gameBoard[0][2] = human;counter += 1;boardUpdate();AImove();}); 
         
-        Io.addActionListener(e -> {gameBoard[1][0] = human;boardUpdate();counter +=1;AImove();}); 
-        I1.addActionListener(e -> {gameBoard[1][1] = human;boardUpdate();counter +=1;AImove();}); 
-        I2.addActionListener(e -> {gameBoard[1][2] = human;boardUpdate();counter +=1;AImove();});
+        Io.addActionListener(e -> {gameBoard[1][0] = human;counter += 1;boardUpdate();AImove();}); 
+        I1.addActionListener(e -> {gameBoard[1][1] = human;counter += 1;boardUpdate();AImove();}); 
+        I2.addActionListener(e -> {gameBoard[1][2] = human;counter += 1;boardUpdate();AImove();});
         
-        two0.addActionListener(e -> {gameBoard[2][0] = human;boardUpdate();counter +=1;AImove();});
-        two1.addActionListener(e -> {gameBoard[2][1] = human;boardUpdate();counter +=1;AImove();});
-        two2.addActionListener(e -> {gameBoard[2][2] = human;boardUpdate();counter +=1;AImove();});
+        two0.addActionListener(e -> {gameBoard[2][0] = human;counter += 1;boardUpdate();AImove();});
+        two1.addActionListener(e -> {gameBoard[2][1] = human;counter += 1;boardUpdate();AImove();});
+        two2.addActionListener(e -> {gameBoard[2][2] = human;counter += 1;boardUpdate();AImove();});
         
         //Adding Buttons to Frame
         this.add(oo);this.add(o1);this.add(o2); //Adding First row of buttons
@@ -324,9 +324,15 @@ public class onegameFrame extends JFrame implements ActionListener {
     public void AImove(){
         if (state.winstate != true){  
             int score;  
-            int bestScore = -1000000;
+            int bestScore;
             int bestmove[] = new int[2];
             boolean isHumanMax;
+
+            if(App.aiToggle == 1){
+                bestScore = -10000000;
+            }else{
+                bestScore = 100000000;
+            }
 
             //Checks every possibel open go and sets it the ai go --> than runs minimax to see what score this will produce
             // resetts the position before chekcing if the score is better than any previous gos
@@ -336,10 +342,10 @@ public class onegameFrame extends JFrame implements ActionListener {
                         gameBoard[i][j] = ai;
                         if(App.aiToggle == 1){
                             isHumanMax = false;
-                            score = minimax(gameBoard, 9-counter, isHumanMax);
+                            score = minimax(gameBoard, 10, isHumanMax);
                         }else{
                             isHumanMax = true;
-                            score = minimax(gameBoard, 9-counter, isHumanMax);
+                            score = minimax(gameBoard, 10, isHumanMax);
                         }
                         gameBoard[i][j] = "";
                         if (score > bestScore){
